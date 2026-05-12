@@ -11,6 +11,32 @@
   --color-earth-black: #1a1a1a;
 }
 
+@utility liquid-glass {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+@utility liquid-glass-dark {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+@keyframes liquid-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(5%, 5%) scale(1.1); }
+  66% { transform: translate(-5%, 2%) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.liquid-blob {
+  filter: blur(80px);
+  animation: liquid-drift 10s infinite ease-in-out;
+}
+
 @layer base {
   body {
     @apply bg-earth-beige text-earth-black font-sans;

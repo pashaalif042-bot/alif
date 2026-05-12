@@ -233,12 +233,18 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-earth-beige selection:bg-earth-tan selection:text-white">
+    <div className="min-h-screen bg-earth-beige selection:bg-earth-tan selection:text-white relative overflow-x-hidden">
+      {/* Liquid Background Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-earth-tan/15 rounded-full liquid-blob" />
+        <div className="absolute bottom-[20%] right-[-5%] w-[40%] h-[40%] bg-earth-brown/10 rounded-full liquid-blob" style={{ animationDelay: '-4s' }} />
+        <div className="absolute top-[40%] right-[10%] w-[35%] h-[35%] bg-earth-tan/10 rounded-full liquid-blob" style={{ animationDelay: '-7s' }} />
+      </div>
+
       {/* Navbar */}
       <nav className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300 px-4 lg:px-6",
-        "bg-white/80 backdrop-blur-md shadow-sm",
-        scrolled ? "py-2" : "py-3"
+        "fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 transition-all duration-500 rounded-2xl",
+        scrolled ? "py-3 liquid-glass border-white/20 shadow-xl" : "py-5 bg-transparent",
       )}>
         <div className="w-full flex justify-between items-center">
           <div className="flex-shrink-0">
@@ -344,11 +350,22 @@ const App = () => {
               <img 
                 src={IMAGERY.hero} 
                 alt="Photography Background" 
-                className="w-full h-full object-cover brightness-[0.6] contrast-[1.1]"
+                className="w-full h-full object-cover brightness-[0.7] contrast-[1.1]"
               />
             </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-t from-earth-black/80 via-transparent to-earth-black/60"></div>
-            <div className="absolute inset-0 bg-earth-black/5 backdrop-blur-[1px]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-earth-black/80 via-transparent to-earth-black/40"></div>
+            
+            {/* Hero Glass Accents */}
+            <motion.div 
+              animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+              transition={{ duration: 10, repeat: Infinity }}
+              className="absolute top-[15%] right-[15%] w-40 h-40 liquid-glass rounded-[30% 70% 70% 30% / 30% 30% 70% 70%] opacity-40 blur-[2px]" 
+            />
+            <motion.div 
+              animate={{ y: [0, 30, 0], rotate: [0, -10, 0] }}
+              transition={{ duration: 12, repeat: Infinity }}
+              className="absolute bottom-[20%] left-[10%] w-32 h-32 liquid-glass rounded-[70% 30% 30% 70% / 70% 70% 30% 30%] opacity-30 blur-[1px]" 
+            />
           </div>
           
           <motion.div 
@@ -400,7 +417,7 @@ const App = () => {
             </div>
             <div className="flex gap-4">
               {['All', 'Street', 'Fashion', 'Life'].map((cat) => (
-                <button key={cat} className="text-[10px] uppercase tracking-widest font-bold text-earth-brown/40 hover:text-earth-brown transition-colors">
+                <button key={cat} className="px-6 py-2 liquid-glass text-[10px] uppercase tracking-widest font-bold text-earth-brown rounded-full hover:bg-earth-tan hover:text-white transition-all shadow-sm">
                   {cat}
                 </button>
               ))}
@@ -438,7 +455,9 @@ const App = () => {
           </div>
           
           <div className="mt-16 text-center">
-            <button className="text-[10px] font-bold uppercase tracking-[0.4em] border-b border-earth-brown pb-2 hover:text-earth-tan hover:border-earth-tan transition-all">View Full Archive</button>
+            <button className="px-10 py-4 liquid-glass text-[10px] font-bold uppercase tracking-[0.4em] rounded-full hover:bg-earth-tan hover:text-white transition-all shadow-md">
+              View Full Archive
+            </button>
           </div>
         </div>
       </section>
@@ -617,8 +636,12 @@ const App = () => {
             >
               <img src={IMAGERY.about} className="rounded-3xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 w-full object-cover aspect-[4/5]" />
             </motion.div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-earth-beige rounded-full blur-[100px] opacity-40 z-0"></div>
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-earth-tan/10 rounded-full blur-2xl"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-earth-beige/50 rounded-full blur-[120px] opacity-60 z-0 liquid-blob"></div>
+            <motion.div 
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-10 -right-10 w-48 h-48 liquid-glass opacity-20 rounded-[40%] blur-[2px]"
+            ></motion.div>
           </div>
           <div className="w-full md:w-1/2">
             <span className="text-earth-tan uppercase tracking-[0.3em] text-[10px] font-bold mb-4 block">{t.visionary}</span>
@@ -681,8 +704,8 @@ const App = () => {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/2">
-              <form onSubmit={handleSubmit} className="space-y-12 bg-white/5 p-12 rounded-[40px] border border-white/5">
+            <div className="w-full lg:w-1/2 relative">
+              <form onSubmit={handleSubmit} className="space-y-12 liquid-glass-dark p-12 rounded-[40px] border border-white/10 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   <div className="space-y-4">
                     <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/30">{t.name}</label>
@@ -695,7 +718,7 @@ const App = () => {
                 </div>
                 <div className="space-y-4">
                   <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/30">{t.serviceTier}</label>
-                  <select name="service" className="w-full bg-transparent border-b border-white/10 py-4 focus:outline-none focus:border-white transition-colors appearance-none">
+                  <select name="service" className="w-full bg-transparent border-b border-white/10 py-4 focus:outline-none focus:border-white transition-colors appearance-none text-white">
                     <option className="bg-earth-black" value={t.grad}>{t.grad}</option>
                     <option className="bg-earth-black" value={t.prewed}>{t.prewed}</option>
                     <option className="bg-earth-black" value={t.eventDoc}>{t.eventDoc}</option>
