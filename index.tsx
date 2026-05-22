@@ -59,6 +59,7 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [lang, setLang] = useState<'en' | 'id'>('en');
+  const [activeCategory, setActiveCategory] = useState('All');
 
   const t = {
     en: {
@@ -243,10 +244,12 @@ const App = () => {
 
       {/* Navbar */}
       <nav className={cn(
-        "fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 transition-all duration-500 rounded-2xl",
-        scrolled ? "py-3 liquid-glass border-white/20 shadow-xl" : "py-5 bg-transparent",
+        "fixed top-0 left-0 w-full z-50 transition-all duration-500 px-6 lg:px-12",
+        scrolled 
+          ? "py-4 bg-white/95 border-b border-earth-brown/5 shadow-sm" 
+          : "py-6 bg-transparent",
       )}>
-        <div className="w-full flex justify-between items-center">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex-shrink-0">
             <a 
               href="#" 
@@ -417,42 +420,68 @@ const App = () => {
             </div>
             <div className="flex gap-4">
               {['All', 'Street', 'Fashion', 'Life'].map((cat) => (
-                <button key={cat} className="px-6 py-2 liquid-glass text-[10px] uppercase tracking-widest font-bold text-earth-brown rounded-full hover:bg-earth-tan hover:text-white transition-all shadow-sm">
+                <button 
+                  key={cat} 
+                  onClick={() => setActiveCategory(cat)}
+                  className={cn(
+                    "px-6 py-2 text-[10px] uppercase tracking-widest font-bold rounded-full transition-all duration-300 shadow-sm cursor-pointer",
+                    activeCategory === cat 
+                      ? "bg-earth-tan text-white scale-105" 
+                      : "liquid-glass text-earth-brown hover:bg-earth-tan/20 hover:text-earth-black"
+                  )}
+                >
                   {cat}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
-            {IMAGERY.portfolio.map((item, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className={cn(
-                  "group relative overflow-hidden rounded-3xl",
-                  item.type === "wide" ? "lg:col-span-8 aspect-[16/9]" : "lg:col-span-4 aspect-[3/4]"
-                )}
-              >
-                <img 
-                  src={item.url} 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" 
-                  alt={item.title}
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity p-8 md:p-12 flex flex-col justify-end">
-                  <p className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest mb-2 font-bold underline underline-offset-8">
-                    {item.category}
-                  </p>
-                  <h3 className="text-2xl md:text-3xl text-white italic font-light">
-                    {item.title}
-                  </h3>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+            <AnimatePresence mode="popLayout">
+              {IMAGERY.portfolio.filter(item => {
+                if (activeCategory === 'All') return true;
+                const itemCat = item.category.toLowerCase();
+                const filterCat = activeCategory.toLowerCase();
+                if (filterCat === 'street') {
+                  return itemCat.includes('street');
+                }
+                if (filterCat === 'fashion') {
+                  return itemCat.includes('editorial') || itemCat.includes('fashion') || itemCat.includes('portrait');
+                }
+                if (filterCat === 'life') {
+                  return itemCat.includes('events') || itemCat.includes('life') || itemCat.includes('product') || itemCat.includes('design');
+                }
+                return itemCat.includes(filterCat);
+              }).map((item, idx) => (
+                <motion.div 
+                  layout
+                  key={item.title || idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  className={cn(
+                    "group relative overflow-hidden rounded-3xl",
+                    item.type === "wide" ? "lg:col-span-8 aspect-[16/9]" : "lg:col-span-4 aspect-[3/4]"
+                  )}
+                >
+                  <img 
+                    src={item.url} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" 
+                    alt={item.title}
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity p-8 md:p-12 flex flex-col justify-end">
+                    <p className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest mb-2 font-bold underline underline-offset-8">
+                      {item.category}
+                    </p>
+                    <h3 className="text-2xl md:text-3xl text-white italic font-light">
+                      {item.title}
+                    </h3>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
           
           <div className="mt-16 text-center">
             <button className="px-10 py-4 liquid-glass text-[10px] font-bold uppercase tracking-[0.4em] rounded-full hover:bg-earth-tan hover:text-white transition-all shadow-md">
